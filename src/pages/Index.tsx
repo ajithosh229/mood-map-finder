@@ -210,6 +210,19 @@ const Index = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}>
                 
+                  <Select value={distance} onValueChange={setDistance}>
+                    <SelectTrigger className="w-full sm:w-52 bg-card glass-strong rounded-xl h-12">
+                      <SelectValue placeholder="Select distance" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1000">1 km</SelectItem>
+                      <SelectItem value="2000">2 km</SelectItem>
+                      <SelectItem value="5000">5 km</SelectItem>
+                      <SelectItem value="10000">10 km</SelectItem>
+                      <SelectItem value="20000">20 km</SelectItem>
+                    </SelectContent>
+                  </Select>
+
                   <Select value={budget} onValueChange={setBudget}>
                     <SelectTrigger className="w-full sm:w-52 bg-card glass-strong rounded-xl h-12">
                       <SelectValue placeholder="Select budget" />
