@@ -43,7 +43,7 @@ const PlaceCard = ({ place, index }: PlaceCardProps) => {
   const toggleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) {
-      toast.info("Sign in to save favorites ✨");
+      toast.info("Sign in to save favorites");
       navigate("/auth");
       return;
     }
@@ -56,7 +56,7 @@ const PlaceCard = ({ place, index }: PlaceCardProps) => {
         .eq("user_id", user.id)
         .eq("place_name", place.name);
       setIsFav(false);
-      toast.success("Removed from favorites 💔");
+      toast.success("Removed from favorites");
     } else {
       await supabase.from("favorites").insert({
         user_id: user.id,
@@ -70,7 +70,7 @@ const PlaceCard = ({ place, index }: PlaceCardProps) => {
         place_lng: place.lng,
       });
       setIsFav(true);
-      toast.success("Saved to favorites! 💖");
+      toast.success("Saved to favorites");
     }
     setFavLoading(false);
   };
@@ -79,47 +79,44 @@ const PlaceCard = ({ place, index }: PlaceCardProps) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 + index * 0.08 }}
-      whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.2 } }}
-      className="group bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-elevated transition-all duration-300 border-2 border-transparent hover:border-primary/20"
+      transition={{ delay: 0.4 + index * 0.06 }}
+      whileHover={{ y: -3, transition: { duration: 0.2 } }}
+      className="group bg-card rounded-xl overflow-hidden shadow-card hover:shadow-elevated transition-all duration-200"
     >
-      {/* Anime-style gradient top bar */}
-      <div className="h-1.5 gradient-primary" />
+      <div className="h-0.5 gradient-primary" />
 
       <div className="p-5">
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1 min-w-0">
-            <h3 className="font-display font-bold text-lg text-foreground truncate">{place.name}</h3>
-            <span className="text-sm text-muted-foreground font-medium">{place.category}</span>
+            <h3 className="font-display font-semibold text-base text-foreground truncate">{place.name}</h3>
+            <span className="text-sm text-muted-foreground">{place.category}</span>
           </div>
           <div className="flex items-center gap-2 ml-2 shrink-0">
-            <motion.button
+            <button
               onClick={toggleFavorite}
               disabled={favLoading}
-              className="p-1.5 rounded-xl hover:bg-secondary transition-colors"
-              whileTap={{ scale: 0.8 }}
-              whileHover={{ scale: 1.2 }}
+              className="p-1.5 rounded-lg hover:bg-secondary transition-colors"
             >
               <Heart
                 className={`w-4 h-4 transition-colors ${
                   isFav ? "text-primary fill-primary" : "text-muted-foreground hover:text-primary"
                 }`}
               />
-            </motion.button>
-            <div className="flex items-center gap-1 gradient-primary rounded-xl px-2.5 py-1 shadow-glow">
+            </button>
+            <div className="flex items-center gap-1 gradient-primary rounded-lg px-2 py-0.5">
               <Star className="w-3 h-3 text-primary-foreground fill-primary-foreground" />
-              <span className="text-xs font-extrabold text-primary-foreground">{place.rating}</span>
+              <span className="text-xs font-semibold text-primary-foreground">{place.rating}</span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
-          <div className="flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 shrink-0 text-primary/60" />
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <MapPin className="w-3.5 h-3.5 shrink-0" />
             <span className="truncate">{place.address}</span>
           </div>
           {place.distance != null && (
-            <span className="shrink-0 text-xs font-bold text-primary bg-primary/10 rounded-lg px-2 py-0.5">
+            <span className="shrink-0 text-xs font-semibold text-primary bg-primary/8 rounded-md px-2 py-0.5">
               {place.distance >= 1000
                 ? `${(place.distance / 1000).toFixed(1)} km`
                 : `${place.distance} m`}
@@ -128,12 +125,12 @@ const PlaceCard = ({ place, index }: PlaceCardProps) => {
         </div>
 
         <div className="flex items-center justify-between border-t border-border pt-3">
-          <span className="text-sm font-extrabold text-foreground">{place.priceRange}</span>
+          <span className="text-sm font-semibold text-foreground">{place.priceRange}</span>
           <div className="flex gap-1.5 flex-wrap justify-end">
             {place.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-[11px] bg-primary/10 text-primary rounded-lg px-2.5 py-0.5 font-bold"
+                className="text-[11px] bg-secondary text-secondary-foreground rounded-md px-2 py-0.5 font-medium"
               >
                 {tag}
               </span>
