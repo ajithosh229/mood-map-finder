@@ -83,6 +83,36 @@ export type Database = {
         }
         Relationships: []
       }
+      search_history: {
+        Row: {
+          budget: string | null
+          created_at: string
+          distance: number | null
+          id: string
+          mood: string
+          results_count: number | null
+          user_id: string
+        }
+        Insert: {
+          budget?: string | null
+          created_at?: string
+          distance?: number | null
+          id?: string
+          mood: string
+          results_count?: number | null
+          user_id: string
+        }
+        Update: {
+          budget?: string | null
+          created_at?: string
+          distance?: number | null
+          id?: string
+          mood?: string
+          results_count?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
