@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import MoodSelector from "@/components/MoodSelector";
@@ -14,7 +14,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { mockPlaces } from "@/data/places";
-import { Search, ArrowLeft, ArrowRight } from "lucide-react";
+import { fetchNearbyPlaces } from "@/lib/api";
+import { useGeolocation } from "@/hooks/use-geolocation";
+import type { Place } from "@/components/PlaceCard";
+import { Search, ArrowLeft, ArrowRight, MapPin, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 type Step = "hero" | "mood" | "results";
 
@@ -48,31 +52,71 @@ const Index = () => {
   const [mood, setMood] = useState<string | null>(null);
   const [budget, setBudget] = useState<string>("");
   const [direction, setDirection] = useState(1);
+  const [places, setPlaces] = useState<Place[]>([]);
+  const [loading, setLoading] = useState(false);
+  const geo = useGeolocation();
 
   const goTo = (next: Step, dir: number) => {
     setDirection(dir);
     setStep(next);
   };
 
-  const handleFindPlaces = () => {
-    if (mood) goTo("results", 1);
+  // Request location when entering mood step
+  useEffect(() => {
+    if (step === "mood" && !geo.lat && !geo.loading && !geo.error) {
+      geo.requestLocation();
+    }
+  }, [step]);
+
+  const handleFindPlaces = async () => {
+    if (!mood) return;
+
+    // If we have location, fetch real places
+    if (geo.lat && geo.lng) {
+      setLoading(true);
+      goTo("results", 1);
+      try {
+        const result = await fetchNearbyPlaces({
+          lat: geo.lat,
+          lng: geo.lng,
+          mood,
+          budget: budget || undefined,
+        });
+        setPlaces(result);
+        if (result.length === 0) {
+          toast.info("No nearby places found. Showing sample results.");
+          setPlaces(getFallbackPlaces());
+        }
+      } catch (err) {
+        console.error("Failed to fetch places:", err);
+        toast.error("Couldn't fetch nearby places. Showing sample results.");
+        setPlaces(getFallbackPlaces());
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      // Fallback to mock data
+      if (geo.error) {
+        toast.info("Location unavailable — showing sample results.");
+      }
+      setPlaces(getFallbackPlaces());
+      goTo("results", 1);
+    }
   };
 
-  const places = mood ? mockPlaces[mood] || [] : [];
-  const filteredPlaces = budget
-    ? places.filter((p) => {
-        if (budget === "low") return p.priceRange === "$";
-        if (budget === "medium") return p.priceRange === "$$";
-        if (budget === "high") return p.priceRange === "$$$";
-        return true;
-      })
-    : places;
-
-  const stepIndex = step === "hero" ? 0 : step === "mood" ? 1 : 2;
+  const getFallbackPlaces = (): Place[] => {
+    const all = mood ? mockPlaces[mood] || [] : [];
+    if (!budget) return all;
+    return all.filter((p) => {
+      if (budget === "low") return p.priceRange === "$";
+      if (budget === "medium") return p.priceRange === "$$";
+      if (budget === "high") return p.priceRange === "$$$";
+      return true;
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden noise-overlay">
-      {/* Persistent navbar */}
       {step !== "hero" && (
         <motion.div
           initial={{ y: -60, opacity: 0 }}
@@ -127,6 +171,34 @@ const Index = () => {
                   <p className="text-muted-foreground text-lg max-w-md mx-auto">
                     Choose a vibe — we'll find the perfect spot to match.
                   </p>
+                </motion.div>
+
+                {/* Location status */}
+                <motion.div
+                  className="flex justify-center mb-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  {geo.loading ? (
+                    <div className="flex items-center gap-2 glass rounded-full px-4 py-2 text-sm text-muted-foreground">
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      Detecting your location...
+                    </div>
+                  ) : geo.lat ? (
+                    <div className="flex items-center gap-2 glass rounded-full px-4 py-2 text-sm text-accent">
+                      <MapPin className="w-3.5 h-3.5" />
+                      Location detected — we'll find places near you
+                    </div>
+                  ) : geo.error ? (
+                    <button
+                      onClick={geo.requestLocation}
+                      className="flex items-center gap-2 glass rounded-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <MapPin className="w-3.5 h-3.5" />
+                      Enable location for nearby results
+                    </button>
+                  ) : null}
                 </motion.div>
 
                 <MoodSelector selected={mood} onSelect={setMood} />
@@ -215,7 +287,7 @@ const Index = () => {
                   </button>
                 </motion.div>
 
-                <ResultsView places={filteredPlaces} mood={mood} />
+                <ResultsView places={places} mood={mood} loading={loading} />
               </div>
             </div>
           </motion.div>

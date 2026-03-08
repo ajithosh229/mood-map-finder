@@ -3,14 +3,25 @@ import { motion } from "framer-motion";
 import LeafletMap from "@/components/LeafletMap";
 import PlaceCard from "@/components/PlaceCard";
 import type { Place } from "@/components/PlaceCard";
+import { Loader2 } from "lucide-react";
 
 interface ResultsViewProps {
   places: Place[];
   mood: string | null;
+  loading?: boolean;
 }
 
-const ResultsView = ({ places, mood }: ResultsViewProps) => {
+const ResultsView = ({ places, mood, loading }: ResultsViewProps) => {
   const [activePlace, setActivePlace] = useState<string | null>(null);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 gap-4">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <p className="text-muted-foreground text-lg">Finding places near you...</p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -45,7 +56,7 @@ const ResultsView = ({ places, mood }: ResultsViewProps) => {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {places.map((place, i) => (
               <div
-                key={place.name}
+                key={place.name + i}
                 onMouseEnter={() => setActivePlace(place.name)}
                 onMouseLeave={() => setActivePlace(null)}
               >
