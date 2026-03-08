@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import NotFound from "./pages/NotFound";
+import ProfilePage from "./pages/ProfilePage";
 
 const queryClient = new QueryClient();
 
