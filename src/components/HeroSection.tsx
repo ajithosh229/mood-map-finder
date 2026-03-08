@@ -94,10 +94,10 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
               variant="gradient"
               size="lg"
               onClick={onGetStarted}
-              className="text-base px-10 h-13 rounded-xl gap-2 shadow-glow hover:shadow-elevated transition-shadow font-semibold"
+              className="text-lg px-14 h-16 rounded-xl gap-3 shadow-glow hover:shadow-elevated transition-shadow font-semibold"
             >
               Get Started
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-5 h-5" />
             </Button>
             <span className="text-sm text-muted-foreground">No sign-up required</span>
           </motion.div>
