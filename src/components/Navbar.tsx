@@ -1,10 +1,12 @@
-import { MapPin, Heart, User, LogOut } from "lucide-react";
+import { MapPin, Heart, User, LogOut, Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/hooks/use-theme";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
+  const { theme, toggle } = useTheme();
   const navigate = useNavigate();
 
   return (
@@ -23,6 +25,13 @@ const Navbar = () => {
         </motion.button>
 
         <div className="flex items-center gap-1">
+          <button
+            onClick={toggle}
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+            aria-label="Toggle dark mode"
+          >
+            {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
           {user ? (
             <>
               <button
