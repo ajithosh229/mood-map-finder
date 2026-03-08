@@ -1,6 +1,7 @@
-import { MapPin, Heart, User, LogOut } from "lucide-react";
+import { MapPin, Heart, User, LogOut, Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/hooks/use-theme";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
