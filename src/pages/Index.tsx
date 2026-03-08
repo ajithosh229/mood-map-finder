@@ -216,11 +216,11 @@ const Index = () => {
                       <SelectValue placeholder="Select distance" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1000">1 km</SelectItem>
                       <SelectItem value="2000">2 km</SelectItem>
                       <SelectItem value="5000">5 km</SelectItem>
                       <SelectItem value="10000">10 km</SelectItem>
                       <SelectItem value="20000">20 km</SelectItem>
+                      <SelectItem value="50000">50 km</SelectItem>
                     </SelectContent>
                   </Select>
 
