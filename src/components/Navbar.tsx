@@ -42,11 +42,10 @@ const Navbar = () => {
                 <span className="hidden sm:inline">Favorites</span>
               </button>
               <button
-                onClick={signOut}
-                className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-secondary"
+                onClick={() => navigate("/profile")}
+                className="flex items-center justify-center w-8 h-8 rounded-lg gradient-primary"
               >
-                <LogOut className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Sign Out</span>
+                <User className="w-4 h-4 text-primary-foreground" />
               </button>
             </>
           ) : (
