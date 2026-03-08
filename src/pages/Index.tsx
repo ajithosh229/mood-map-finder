@@ -18,6 +18,7 @@ import { fetchNearbyPlaces } from "@/lib/api";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import type { Place } from "@/components/PlaceCard";
 import { Search, ArrowLeft, ArrowRight, MapPin, Loader2 } from "lucide-react";
+import ShareButton from "@/components/ShareButton";
 import { toast } from "sonner";
 
 type Step = "hero" | "mood" | "results";
@@ -293,13 +294,16 @@ const Index = () => {
                       Your perfect spots
                     </h2>
                   </div>
-                  <button
-                  onClick={() => goTo("mood", -1)}
-                  className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors glass rounded-xl px-4 py-2.5">
-                  
-                    <ArrowLeft className="w-4 h-4" />
-                    Change mood
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <ShareButton mood={mood} placesCount={places.length} />
+                    <button
+                      onClick={() => goTo("mood", -1)}
+                      className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors glass rounded-xl px-4 py-2.5"
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                      Change mood
+                    </button>
+                  </div>
                 </motion.div>
 
                 <ResultsView places={places} mood={mood} loading={loading} />
