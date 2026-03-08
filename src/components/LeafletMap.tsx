@@ -105,10 +105,10 @@ function createIcon(isActive: boolean) {
       width: ${size}px;
       height: ${size}px;
       border-radius: 50% 50% 50% 0;
-      background: ${isActive ? "linear-gradient(135deg, hsl(12, 76%, 61%), hsl(28, 88%, 52%))" : "hsl(12, 76%, 61%)"};
+      background: ${isActive ? "linear-gradient(135deg, hsl(330, 80%, 65%), hsl(280, 70%, 60%))" : "hsl(330, 80%, 65%)"};
       transform: rotate(-45deg);
-      border: 2px solid white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border: 2.5px solid white;
+      box-shadow: 0 4px 16px rgba(200, 50, 150, 0.3);
       transition: all 0.2s;
     "></div>`,
     iconSize: [size, size],
