@@ -14,7 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          place_address: string | null
+          place_category: string | null
+          place_lat: number | null
+          place_lng: number | null
+          place_name: string
+          place_price_range: string | null
+          place_rating: number | null
+          place_tags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          place_address?: string | null
+          place_category?: string | null
+          place_lat?: number | null
+          place_lng?: number | null
+          place_name: string
+          place_price_range?: string | null
+          place_rating?: number | null
+          place_tags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          place_address?: string | null
+          place_category?: string | null
+          place_lat?: number | null
+          place_lng?: number | null
+          place_name?: string
+          place_price_range?: string | null
+          place_rating?: number | null
+          place_tags?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
