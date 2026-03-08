@@ -55,7 +55,7 @@ serve(async (req) => {
 
     const response = await fetch(url, {
       headers: {
-        Authorization: FOURSQUARE_API_KEY,
+        Authorization: FOURSQUARE_API_KEY.startsWith("fsq_") ? FOURSQUARE_API_KEY : `fsq_${FOURSQUARE_API_KEY}`,
         Accept: "application/json",
       },
     });
