@@ -6,44 +6,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
-import coffeeImg from "@/assets/places/coffee-shop.jpg";
-import restaurantImg from "@/assets/places/restaurant.jpg";
-import spaImg from "@/assets/places/spa.jpg";
-import fastFoodImg from "@/assets/places/fast-food.jpg";
-import budgetImg from "@/assets/places/budget.jpg";
-import gamesImg from "@/assets/places/games.jpg";
-import outdoorImg from "@/assets/places/outdoor.jpg";
-
-const categoryImageMap: Record<string, string> = {
-  "Coffee Shop": coffeeImg,
-  "Co-working Café": coffeeImg,
-  "Coffee House": coffeeImg,
-  "Italian": restaurantImg,
-  "Cocktail Bar": restaurantImg,
-  "French Bistro": restaurantImg,
-  "Spa & Lounge": spaImg,
-  "Bookshop Café": spaImg,
-  "Lounge": spaImg,
-  "Fast Casual": fastFoodImg,
-  "Street Food": fastFoodImg,
-  "Asian": fastFoodImg,
-  "Diner": budgetImg,
-  "Café": budgetImg,
-  "Mediterranean": budgetImg,
-  "Bowling Alley": gamesImg,
-  "Arcade": gamesImg,
-  "Sports Centre": gamesImg,
-  "Outdoor Games": outdoorImg,
-  "Outdoor Sports": outdoorImg,
-  "Go-Karting": outdoorImg,
-};
-
-function getPlaceImage(category: string, tags: string[]): string {
-  if (categoryImageMap[category]) return categoryImageMap[category];
-  if (tags.some((t) => t.toLowerCase() === "outdoor")) return outdoorImg;
-  return coffeeImg;
-}
-
 export interface Place {
   name: string;
   category: string;
@@ -113,8 +75,6 @@ const PlaceCard = ({ place, index }: PlaceCardProps) => {
     setFavLoading(false);
   };
 
-  const image = getPlaceImage(place.category, place.tags);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -123,40 +83,34 @@ const PlaceCard = ({ place, index }: PlaceCardProps) => {
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
       className="group bg-card rounded-xl overflow-hidden shadow-card hover:shadow-elevated transition-all duration-200"
     >
-      {/* Image */}
-      <div className="relative h-36 overflow-hidden">
-        <img
-          src={image}
-          alt={place.name}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
-          <button
-            onClick={toggleFavorite}
-            disabled={favLoading}
-            className="p-1.5 rounded-lg bg-black/30 backdrop-blur-sm hover:bg-black/50 transition-colors"
-          >
-            <Heart
-              className={`w-4 h-4 transition-colors ${
-                isFav ? "text-primary fill-primary" : "text-white/90 hover:text-primary"
-              }`}
-            />
-          </button>
-          <div className="flex items-center gap-1 gradient-primary rounded-lg px-2 py-0.5">
-            <Star className="w-3 h-3 text-primary-foreground fill-primary-foreground" />
-            <span className="text-xs font-semibold text-primary-foreground">{place.rating}</span>
+      <div className="h-0.5 gradient-primary" />
+
+      <div className="p-5">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-display font-semibold text-base text-foreground truncate">{place.name}</h3>
+            <span className="text-sm text-muted-foreground">{place.category}</span>
+          </div>
+          <div className="flex items-center gap-2 ml-2 shrink-0">
+            <button
+              onClick={toggleFavorite}
+              disabled={favLoading}
+              className="p-1.5 rounded-lg hover:bg-secondary transition-colors"
+            >
+              <Heart
+                className={`w-4 h-4 transition-colors ${
+                  isFav ? "text-primary fill-primary" : "text-muted-foreground hover:text-primary"
+                }`}
+              />
+            </button>
+            <div className="flex items-center gap-1 gradient-primary rounded-lg px-2 py-0.5">
+              <Star className="w-3 h-3 text-primary-foreground fill-primary-foreground" />
+              <span className="text-xs font-semibold text-primary-foreground">{place.rating}</span>
+            </div>
           </div>
         </div>
-        <div className="absolute bottom-2.5 left-3">
-          <h3 className="font-display font-semibold text-base text-white drop-shadow-md">{place.name}</h3>
-          <span className="text-xs text-white/80">{place.category}</span>
-        </div>
-      </div>
 
-      <div className="p-4">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
           <div className="flex items-center gap-1.5 min-w-0">
             <MapPin className="w-3.5 h-3.5 shrink-0" />
             <span className="truncate">{place.address}</span>
@@ -185,7 +139,7 @@ const PlaceCard = ({ place, index }: PlaceCardProps) => {
             </a>
           </div>
           <div className="flex gap-1.5 flex-wrap justify-end">
-            {place.tags.slice(0, 2).map((tag) => (
+            {place.tags.map((tag) => (
               <span
                 key={tag}
                 className="text-[11px] bg-secondary text-secondary-foreground rounded-md px-2 py-0.5 font-medium"
