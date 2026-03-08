@@ -51,7 +51,7 @@ serve(async (req) => {
       fields: "fsq_id,name,categories,location,rating,price,geocodes,distance",
     });
 
-    const url = `https://api.foursquare.com/v3/places/search?${params}`;
+    const url = `https://places-api.foursquare.com/places/search?${params}`;
 
     const response = await fetch(url, {
       headers: {
