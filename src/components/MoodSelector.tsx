@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Briefcase, Heart, Coffee, Utensils, Wallet, LucideIcon } from "lucide-react";
+import { Briefcase, Heart, Coffee, Utensils, Wallet, Gamepad2, LucideIcon } from "lucide-react";
 
 interface MoodItem {
   id: string;
