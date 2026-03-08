@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['DM Serif Display', 'serif'],
-        body: ['DM Sans', 'sans-serif'],
+        display: ['M PLUS Rounded 1c', 'sans-serif'],
+        body: ['Zen Maru Gothic', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
