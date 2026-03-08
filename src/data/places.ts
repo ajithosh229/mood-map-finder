@@ -26,4 +26,9 @@ export const mockPlaces: Record<string, Place[]> = {
     { name: "The Student Hub", category: "Café", rating: 4.1, address: "3 Campus Dr", priceRange: "$", tags: ["Deals", "Coffee"], lat: 40.7295, lng: -73.9965 },
     { name: "Bistro 45", category: "Mediterranean", rating: 4.4, address: "45 Olive St", priceRange: "$", tags: ["Falafel", "Fresh"], lat: 40.7350, lng: -73.9880 },
   ],
+  games: [
+    { name: "Strike Zone", category: "Bowling Alley", rating: 4.3, address: "55 Lane Ave", priceRange: "$$", tags: ["Bowling", "Fun"], lat: 40.7510, lng: -73.9820 },
+    { name: "Pixel Arcade", category: "Arcade", rating: 4.6, address: "12 Game St", priceRange: "$", tags: ["Arcade", "Retro"], lat: 40.7540, lng: -73.9870 },
+    { name: "Arena Sports Club", category: "Sports Centre", rating: 4.5, address: "89 Victory Blvd", priceRange: "$$", tags: ["Sports", "Indoor"], lat: 40.7480, lng: -73.9790 },
+  ],
 };
