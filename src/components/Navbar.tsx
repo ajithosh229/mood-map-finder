@@ -25,6 +25,13 @@ const Navbar = () => {
         </motion.button>
 
         <div className="flex items-center gap-1">
+          <button
+            onClick={toggle}
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+            aria-label="Toggle dark mode"
+          >
+            {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
           {user ? (
             <>
               <button
