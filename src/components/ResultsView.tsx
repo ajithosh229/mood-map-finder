@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import LeafletMap from "@/components/LeafletMap";
 import PlaceCard from "@/components/PlaceCard";
 import PlaceDetailModal from "@/components/PlaceDetailModal";
 import type { Place } from "@/components/PlaceCard";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 
 interface ResultsViewProps {
   places: Place[];
@@ -15,6 +15,26 @@ interface ResultsViewProps {
 const ResultsView = ({ places, mood, loading }: ResultsViewProps) => {
   const [activePlace, setActivePlace] = useState<string | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const allTags = useMemo(() => {
+    const tags = new Set<string>();
+    places.forEach((p) => p.tags.forEach((t) => tags.add(t)));
+    return Array.from(tags).sort();
+  }, [places]);
+
+  const filteredPlaces = useMemo(() => {
+    if (selectedTags.length === 0) return places;
+    return places.filter((p) =>
+      selectedTags.every((tag) => p.tags.includes(tag))
+    );
+  }, [places, selectedTags]);
+
+  const toggleTag = (tag: string) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
 
   if (loading) {
     return (
@@ -33,7 +53,7 @@ const ResultsView = ({ places, mood, loading }: ResultsViewProps) => {
         transition={{ delay: 0.2 }}
       >
         <LeafletMap
-          places={places}
+          places={filteredPlaces}
           activePlace={activePlace}
           onPlaceClick={setActivePlace}
         />
@@ -45,18 +65,46 @@ const ResultsView = ({ places, mood, loading }: ResultsViewProps) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
       >
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-2xl font-display text-foreground">Recommended places</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              {places.length} {places.length === 1 ? "spot" : "spots"} matched your vibe
+              {filteredPlaces.length} {filteredPlaces.length === 1 ? "spot" : "spots"} matched your vibe
             </p>
           </div>
+          {selectedTags.length > 0 && (
+            <button
+              onClick={() => setSelectedTags([])}
+              className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+            >
+              <X className="w-3 h-3" />
+              Clear filters
+            </button>
+          )}
         </div>
 
-        {places.length > 0 ? (
+        {/* Tag filters */}
+        {allTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => toggleTag(tag)}
+                className={`text-xs font-medium rounded-lg px-3 py-1.5 transition-all ${
+                  selectedTags.includes(tag)
+                    ? "gradient-primary text-primary-foreground shadow-sm"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {filteredPlaces.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {places.map((place, i) => (
+            {filteredPlaces.map((place, i) => (
               <div
                 key={place.name + i}
                 onMouseEnter={() => setActivePlace(place.name)}
@@ -71,7 +119,7 @@ const ResultsView = ({ places, mood, loading }: ResultsViewProps) => {
         ) : (
           <div className="glass-strong rounded-2xl p-12 text-center">
             <p className="text-muted-foreground text-lg">
-              No places match that budget. Try adjusting your filters.
+              No places match those filters. Try removing some tags.
             </p>
           </div>
         )}
