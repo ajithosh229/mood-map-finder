@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Star, MapPin, Heart } from "lucide-react";
+import { Star, MapPin, Heart, Navigation } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -125,7 +125,19 @@ const PlaceCard = ({ place, index }: PlaceCardProps) => {
         </div>
 
         <div className="flex items-center justify-between border-t border-border pt-3">
-          <span className="text-sm font-semibold text-foreground">{place.priceRange}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-foreground">{place.priceRange}</span>
+            <a
+              href={`https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 transition-colors bg-primary/8 rounded-md px-2 py-1"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Navigation className="w-3 h-3" />
+              Directions
+            </a>
+          </div>
           <div className="flex gap-1.5 flex-wrap justify-end">
             {place.tags.map((tag) => (
               <span
