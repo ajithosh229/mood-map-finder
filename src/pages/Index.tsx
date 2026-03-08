@@ -108,6 +108,17 @@ const Index = () => {
       setPlaces(getFallbackPlaces());
       goTo("results", 1);
     }
+    // Save search history
+    if (user) {
+      const finalPlaces = places.length > 0 ? places : getFallbackPlaces();
+      supabase.from("search_history").insert({
+        user_id: user.id,
+        mood,
+        budget: budget || null,
+        distance: parseInt(distance),
+        results_count: finalPlaces.length,
+      }).then(() => {});
+    }
   };
 
   const getFallbackPlaces = (): Place[] => {
