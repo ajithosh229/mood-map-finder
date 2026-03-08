@@ -77,17 +77,7 @@ serve(async (req) => {
       };
     });
 
-    // Filter by budget if specified
-    const filtered = budget
-      ? places.filter((p: any) => {
-          if (budget === "low") return p.priceRange === "$";
-          if (budget === "medium") return p.priceRange === "$$";
-          if (budget === "high") return p.priceRange === "$$$";
-          return true;
-        })
-      : places;
-
-    return new Response(JSON.stringify({ places: filtered }), {
+    return new Response(JSON.stringify({ places }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: unknown) {
