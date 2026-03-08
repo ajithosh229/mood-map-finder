@@ -8,6 +8,8 @@ export interface Place {
   address: string;
   priceRange: string;
   tags: string[];
+  lat: number;
+  lng: number;
 }
 
 interface PlaceCardProps {
