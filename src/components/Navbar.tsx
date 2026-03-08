@@ -15,30 +15,26 @@ const Navbar = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           onClick={() => navigate("/")}
-          whileHover={{ scale: 1.02 }}
         >
-          <motion.div
-            className="w-8 h-8 rounded-xl gradient-primary flex items-center justify-center shadow-glow"
-            whileHover={{ rotate: [0, -10, 10, 0] }}
-          >
+          <div className="w-7 h-7 rounded-lg gradient-primary flex items-center justify-center">
             <MapPin className="w-4 h-4 text-primary-foreground" />
-          </motion.div>
-          <span className="font-display text-lg font-bold text-foreground">MoodMap ✨</span>
+          </div>
+          <span className="font-display text-lg font-bold text-foreground">MoodMap</span>
         </motion.button>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {user ? (
             <>
               <button
                 onClick={() => navigate("/favorites")}
-                className="flex items-center gap-1.5 text-sm font-bold text-muted-foreground hover:text-primary transition-colors px-3 py-1.5 rounded-xl hover:bg-secondary"
+                className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-secondary"
               >
                 <Heart className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Favorites 💖</span>
+                <span className="hidden sm:inline">Favorites</span>
               </button>
               <button
                 onClick={signOut}
-                className="flex items-center gap-1.5 text-sm font-bold text-muted-foreground hover:text-primary transition-colors px-3 py-1.5 rounded-xl hover:bg-secondary"
+                className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-secondary"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Sign Out</span>
@@ -47,10 +43,10 @@ const Navbar = () => {
           ) : (
             <button
               onClick={() => navigate("/auth")}
-              className="flex items-center gap-1.5 text-sm font-bold text-primary hover:text-foreground transition-colors px-3 py-1.5 rounded-xl hover:bg-secondary"
+              className="flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-foreground transition-colors px-3 py-1.5 rounded-lg hover:bg-secondary"
             >
               <User className="w-3.5 h-3.5" />
-              Sign In ✨
+              Sign In
             </button>
           )}
         </div>
