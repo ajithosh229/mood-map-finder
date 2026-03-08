@@ -172,3 +172,23 @@
     pointer-events: none;
   }
 }
+
+/* Leaflet overrides */
+.leaflet-container {
+  font-family: var(--font-body) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0.75rem !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 16px 48px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid hsl(30, 12%, 90%) !important;
+}
+
+.leaflet-popup-tip {
+  box-shadow: none !important;
+}
+
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}

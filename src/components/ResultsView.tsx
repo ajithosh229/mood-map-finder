@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import MapPlaceholder from "@/components/MapPlaceholder";
+import LeafletMap from "@/components/LeafletMap";
 import PlaceCard from "@/components/PlaceCard";
 import type { Place } from "@/components/PlaceCard";
 
@@ -9,6 +10,8 @@ interface ResultsViewProps {
 }
 
 const ResultsView = ({ places, mood }: ResultsViewProps) => {
+  const [activePlace, setActivePlace] = useState<string | null>(null);
+
   return (
     <div>
       <motion.div
@@ -16,7 +19,11 @@ const ResultsView = ({ places, mood }: ResultsViewProps) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <MapPlaceholder />
+        <LeafletMap
+          places={places}
+          activePlace={activePlace}
+          onPlaceClick={setActivePlace}
+        />
       </motion.div>
 
       <motion.div
@@ -37,7 +44,13 @@ const ResultsView = ({ places, mood }: ResultsViewProps) => {
         {places.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {places.map((place, i) => (
-              <PlaceCard key={place.name} place={place} index={i} />
+              <div
+                key={place.name}
+                onMouseEnter={() => setActivePlace(place.name)}
+                onMouseLeave={() => setActivePlace(null)}
+              >
+                <PlaceCard place={place} index={i} />
+              </div>
             ))}
           </div>
         ) : (
