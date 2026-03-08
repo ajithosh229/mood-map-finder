@@ -50,7 +50,7 @@ const pageTransition = {
 const Index = () => {
   const [step, setStep] = useState<Step>("hero");
   const [mood, setMood] = useState<string | null>(null);
-  const [budget, setBudget] = useState<string>("");
+  const [distance, setDistance] = useState<string>("2000");
   const [direction, setDirection] = useState(1);
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(false);
