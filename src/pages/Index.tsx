@@ -51,6 +51,7 @@ const pageTransition = {
 };
 
 const Index = () => {
+  const { user } = useAuth();
   const [step, setStep] = useState<Step>("hero");
   const [mood, setMood] = useState<string | null>(null);
   const [budget, setBudget] = useState<string>("");
