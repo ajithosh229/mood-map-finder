@@ -15,6 +15,7 @@ export interface Place {
   tags: string[];
   lat: number;
   lng: number;
+  distance?: number;
 }
 
 interface PlaceCardProps {
