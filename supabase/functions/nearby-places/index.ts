@@ -7,20 +7,13 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-// Foursquare category IDs mapped to moods
-const moodCategories: Record<string, string> = {
-  work: "13032,13035", // Coffee shops, coworking
-  date: "13065,13003,13025", // Restaurants, bars, Italian
-  relax: "13035,13034,18000", // Cafes, tea rooms, spas
-  "quick-bite": "13145,13040,13072", // Fast food, burger, pizza
-  budget: "13065,13032,13145", // Restaurants, coffee, fast food
-};
-
-// Foursquare price mapping
-const budgetToPrice: Record<string, number[]> = {
-  low: [1],
-  medium: [2],
-  high: [3, 4],
+// LocationIQ tags mapped to moods
+const moodTags: Record<string, string> = {
+  work: "cafe",
+  date: "restaurant",
+  relax: "cafe",
+  "quick-bite": "fast_food",
+  budget: "restaurant",
 };
 
 serve(async (req) => {
@@ -29,9 +22,9 @@ serve(async (req) => {
   }
 
   try {
-    const FOURSQUARE_API_KEY = Deno.env.get("FOURSQUARE_API_KEY");
-    if (!FOURSQUARE_API_KEY) {
-      throw new Error("FOURSQUARE_API_KEY is not configured");
+    const LOCATIONIQ_API_KEY = Deno.env.get("LOCATIONIQ_API_KEY");
+    if (!LOCATIONIQ_API_KEY) {
+      throw new Error("LOCATIONIQ_API_KEY is not configured");
     }
 
     const { lat, lng, mood, budget, radius = 2000 } = await req.json();
@@ -40,61 +33,47 @@ serve(async (req) => {
       throw new Error("lat, lng, and mood are required");
     }
 
-    const categories = moodCategories[mood] || "13065";
+    const tag = moodTags[mood] || "restaurant";
 
     const params = new URLSearchParams({
-      ll: `${lat},${lng}`,
+      key: LOCATIONIQ_API_KEY,
+      lat: String(lat),
+      lon: String(lng),
+      tag,
       radius: String(radius),
-      categories,
+      format: "json",
       limit: "12",
-      sort: "RELEVANCE",
-      fields: "fsq_id,name,categories,location,rating,price,geocodes,distance",
     });
 
-    const url = `https://places-api.foursquare.com/places/search?${params}`;
+    const url = `https://us1.locationiq.com/v1/nearby?${params}`;
 
-    const response = await fetch(url, {
-      headers: {
-        Authorization: FOURSQUARE_API_KEY,
-        Accept: "application/json",
-      },
-    });
+    const response = await fetch(url);
 
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
-        `Foursquare API error [${response.status}]: ${errorText}`
+        `LocationIQ API error [${response.status}]: ${errorText}`
       );
     }
 
     const data = await response.json();
 
     // Transform to our Place format
-    const places = (data.results || []).map((venue: any) => {
-      const priceLevel = venue.price ?? 0;
-      const priceRange =
-        priceLevel === 1
-          ? "$"
-          : priceLevel === 2
-          ? "$$"
-          : priceLevel >= 3
-          ? "$$$"
-          : "$$";
-
-      const categoryNames = (venue.categories || []).map(
-        (c: any) => c.short_name || c.name
-      );
+    const places = (Array.isArray(data) ? data : []).map((poi: any) => {
+      const tags: string[] = [];
+      if (poi.type) tags.push(poi.type);
+      if (poi.class) tags.push(poi.class);
 
       return {
-        name: venue.name,
-        category: categoryNames[0] || "Place",
-        rating: venue.rating ? Math.round(venue.rating) / 2 : 4.0,
-        address: venue.location?.formatted_address || venue.location?.address || "Address unavailable",
-        priceRange,
-        tags: categoryNames.slice(0, 3),
-        lat: venue.geocodes?.main?.latitude ?? lat,
-        lng: venue.geocodes?.main?.longitude ?? lng,
-        distance: venue.distance,
+        name: poi.display_name?.split(",")[0] || poi.name || "Unknown Place",
+        category: poi.type || poi.class || "Place",
+        rating: 4.0, // LocationIQ doesn't provide ratings
+        address: poi.display_name || "Address unavailable",
+        priceRange: "$$", // LocationIQ doesn't provide price info
+        tags: tags.slice(0, 3),
+        lat: parseFloat(poi.lat) || lat,
+        lng: parseFloat(poi.lon) || lng,
+        distance: poi.distance ? Math.round(parseFloat(poi.distance)) : undefined,
       };
     });
 
