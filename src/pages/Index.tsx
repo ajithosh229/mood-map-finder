@@ -80,7 +80,8 @@ const Index = () => {
           lat: geo.lat,
           lng: geo.lng,
           mood,
-          budget: budget || undefined
+          budget: budget || undefined,
+          radius: parseInt(distance),
         });
         setPlaces(result);
         if (result.length === 0) {
