@@ -15,6 +15,8 @@ import {
 "@/components/ui/select";
 import { mockPlaces } from "@/data/places";
 import { fetchNearbyPlaces } from "@/lib/api";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import type { Place } from "@/components/PlaceCard";
 import { Search, ArrowLeft, ArrowRight, MapPin, Loader2 } from "lucide-react";
@@ -49,6 +51,7 @@ const pageTransition = {
 };
 
 const Index = () => {
+  const { user } = useAuth();
   const [step, setStep] = useState<Step>("hero");
   const [mood, setMood] = useState<string | null>(null);
   const [budget, setBudget] = useState<string>("");
@@ -104,6 +107,17 @@ const Index = () => {
       }
       setPlaces(getFallbackPlaces());
       goTo("results", 1);
+    }
+    // Save search history
+    if (user) {
+      const finalPlaces = places.length > 0 ? places : getFallbackPlaces();
+      supabase.from("search_history").insert({
+        user_id: user.id,
+        mood,
+        budget: budget || null,
+        distance: parseInt(distance),
+        results_count: finalPlaces.length,
+      }).then(() => {});
     }
   };
 
