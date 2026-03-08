@@ -14,6 +14,7 @@ const moodTags: Record<string, string[]> = {
   relax: ["cafe", "park", "spa"],
   "quick-bite": ["fast_food", "food_court", "cafe"],
   budget: ["restaurant", "cafe", "fast_food"],
+  games: ["bowling_alley", "amusement_arcade", "sports_centre"],
 };
 
 async function fetchTag(

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Briefcase, Heart, Coffee, Utensils, Wallet, LucideIcon } from "lucide-react";
+import { Briefcase, Heart, Coffee, Utensils, Wallet, Gamepad2, LucideIcon } from "lucide-react";
 
 interface MoodItem {
   id: string;
@@ -15,6 +15,7 @@ const moods: MoodItem[] = [
   { id: "relax", label: "Relax", icon: Coffee, description: "Calm & comfortable", gradient: "from-teal-500/20 to-emerald-500/10" },
   { id: "quick-bite", label: "Quick Bite", icon: Utensils, description: "Fast & delicious", gradient: "from-sky-500/20 to-blue-500/10" },
   { id: "budget", label: "Budget", icon: Wallet, description: "Great value picks", gradient: "from-violet-500/20 to-purple-500/10" },
+  { id: "games", label: "Games", icon: Gamepad2, description: "Fun & entertainment", gradient: "from-indigo-500/20 to-cyan-500/10" },
 ];
 
 interface MoodSelectorProps {
@@ -37,7 +38,7 @@ const item = {
 const MoodSelector = ({ selected, onSelect }: MoodSelectorProps) => {
   return (
     <motion.div
-      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"
+      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4"
       variants={container}
       initial="hidden"
       animate="show"
