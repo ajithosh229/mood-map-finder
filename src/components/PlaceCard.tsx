@@ -113,9 +113,18 @@ const PlaceCard = ({ place, index }: PlaceCardProps) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4">
-          <MapPin className="w-3.5 h-3.5 shrink-0 text-primary/60" />
-          <span className="truncate">{place.address}</span>
+        <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
+          <div className="flex items-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5 shrink-0 text-primary/60" />
+            <span className="truncate">{place.address}</span>
+          </div>
+          {place.distance != null && (
+            <span className="shrink-0 text-xs font-bold text-primary bg-primary/10 rounded-lg px-2 py-0.5">
+              {place.distance >= 1000
+                ? `${(place.distance / 1000).toFixed(1)} km`
+                : `${place.distance} m`}
+            </span>
+          )}
         </div>
 
         <div className="flex items-center justify-between border-t border-border pt-3">
