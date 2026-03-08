@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
+  const { theme, toggle } = useTheme();
   const navigate = useNavigate();
 
   return (
