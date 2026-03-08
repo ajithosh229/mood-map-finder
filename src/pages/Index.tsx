@@ -18,6 +18,7 @@ import { fetchNearbyPlaces } from "@/lib/api";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import type { Place } from "@/components/PlaceCard";
 import { Search, ArrowLeft, ArrowRight, MapPin, Loader2 } from "lucide-react";
+import ShareButton from "@/components/ShareButton";
 import { toast } from "sonner";
 
 type Step = "hero" | "mood" | "results";
