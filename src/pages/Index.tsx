@@ -51,6 +51,7 @@ const Index = () => {
   const [step, setStep] = useState<Step>("hero");
   const [mood, setMood] = useState<string | null>(null);
   const [budget, setBudget] = useState<string>("");
+  const [distance, setDistance] = useState<string>("2000");
   const [direction, setDirection] = useState(1);
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(false);
@@ -80,7 +81,8 @@ const Index = () => {
           lat: geo.lat,
           lng: geo.lng,
           mood,
-          budget: budget || undefined
+          budget: budget || undefined,
+          radius: parseInt(distance),
         });
         setPlaces(result);
         if (result.length === 0) {
@@ -209,6 +211,19 @@ const Index = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}>
                 
+                  <Select value={distance} onValueChange={setDistance}>
+                    <SelectTrigger className="w-full sm:w-52 bg-card glass-strong rounded-xl h-12">
+                      <SelectValue placeholder="Select distance" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1000">1 km</SelectItem>
+                      <SelectItem value="2000">2 km</SelectItem>
+                      <SelectItem value="5000">5 km</SelectItem>
+                      <SelectItem value="10000">10 km</SelectItem>
+                      <SelectItem value="20000">20 km</SelectItem>
+                    </SelectContent>
+                  </Select>
+
                   <Select value={budget} onValueChange={setBudget}>
                     <SelectTrigger className="w-full sm:w-52 bg-card glass-strong rounded-xl h-12">
                       <SelectValue placeholder="Select budget" />
