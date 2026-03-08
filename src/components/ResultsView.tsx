@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import LeafletMap from "@/components/LeafletMap";
 import PlaceCard from "@/components/PlaceCard";
+import PlaceDetailModal from "@/components/PlaceDetailModal";
 import type { Place } from "@/components/PlaceCard";
 import { Loader2 } from "lucide-react";
 
@@ -13,6 +14,7 @@ interface ResultsViewProps {
 
 const ResultsView = ({ places, mood, loading }: ResultsViewProps) => {
   const [activePlace, setActivePlace] = useState<string | null>(null);
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   if (loading) {
     return (
@@ -59,6 +61,8 @@ const ResultsView = ({ places, mood, loading }: ResultsViewProps) => {
                 key={place.name + i}
                 onMouseEnter={() => setActivePlace(place.name)}
                 onMouseLeave={() => setActivePlace(null)}
+                onClick={() => setSelectedPlace(place)}
+                className="cursor-pointer"
               >
                 <PlaceCard place={place} index={i} />
               </div>
@@ -72,6 +76,11 @@ const ResultsView = ({ places, mood, loading }: ResultsViewProps) => {
           </div>
         )}
       </motion.div>
+
+      <PlaceDetailModal
+        place={selectedPlace}
+        onClose={() => setSelectedPlace(null)}
+      />
     </div>
   );
 };
