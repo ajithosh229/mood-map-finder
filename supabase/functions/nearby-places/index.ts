@@ -49,6 +49,13 @@ serve(async (req) => {
 
     const response = await fetch(url);
 
+    // LocationIQ returns 404 when no results found — treat as empty
+    if (response.status === 404) {
+      return new Response(JSON.stringify({ places: [] }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
