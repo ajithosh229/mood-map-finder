@@ -15,6 +15,8 @@ import {
 "@/components/ui/select";
 import { mockPlaces } from "@/data/places";
 import { fetchNearbyPlaces } from "@/lib/api";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import type { Place } from "@/components/PlaceCard";
 import { Search, ArrowLeft, ArrowRight, MapPin, Loader2 } from "lucide-react";
